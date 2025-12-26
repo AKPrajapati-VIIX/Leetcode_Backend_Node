@@ -14,6 +14,7 @@ import { pullAllImages } from './utils/containers/pullimage.util';
 // import { createNewDockerContainer } from './utils/containers/createContainer.util';
 // import { PYTHON_IMAGE } from './utils/constants';
 import { runCode } from './utils/containers/codeRunner.util';
+import { CPP_IMAGE, PYTHON_IMAGE } from './utils/constants';
 
 const app = express();
 
@@ -48,7 +49,7 @@ app.listen(serverConfig.PORT, async() => {
 //    await pullImage("python:3.9");
 //     console.log("Python image pulled successfully");
 
-    await pullAllImages();
+    await pullAllImages(); 
     console.log("All images pulled successfully");
 
     // const container =  await createNewDockerContainer({
@@ -59,33 +60,52 @@ app.listen(serverConfig.PORT, async() => {
 
     //     await container?.start();
     // console.log("Docker container created successfully");
-    await testPyThonCode();
+    // await testPyThonCode();
+
+    await testCppCode();
 });
 
 
-async function testPyThonCode(){
-    const pythonCode = `
+// async function testPyThonCode(){
+//     const pythonCode = `
 
-import time
-i=0
-while True:
-    i+=1
-    print(i)
-    time.sleep(1)
+// import time
+// i=0
+// while True:
+//     i+=1
+//     print(i)
+//     time.sleep(1)
 
-print("Hello, World!")
-    `;
+// print("Hello, World!")
+//     `;
 
-    // Create a container with the Python code
+//     // Create a container with the Python code
 
+//     await runCode({
+//         code: pythonCode,
+//         language: 'python',
+//         timeLimit: 3000, // 3 seconds
+//         memoryLimit: 512 * 1024 * 1024, // 512 MB
+//         imageName: PYTHON_IMAGE,
+      
+//     });
+// }
+
+async function testCppCode(){
+    const cppCode = `
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!!!" << endl;
+    return 0;
+}
+    `;  
     await runCode({
-        code: pythonCode,
-        language: 'python',
+        code: cppCode,
+        language: 'cpp',
         timeLimit: 3000, // 3 seconds
         memoryLimit: 512 * 1024 * 1024, // 512 MB
-      
+        imageName: CPP_IMAGE,
     });
-
-
-    
 }
